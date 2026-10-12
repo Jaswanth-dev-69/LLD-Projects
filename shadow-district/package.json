@@ -1,0 +1,35 @@
+{
+  "name": "shadow-district",
+  "private": true,
+  "version": "1.0.0",
+  "description": "PROJECT: SHADOW DISTRICT — a third-person open-world action shooter that runs entirely in the browser.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "node scripts/smoke-test.mjs"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "^0.19.3",
+    "@fontsource/bebas-neue": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/rajdhani": "^5.3.0",
+    "n8ao": "^2.0.1",
+    "postprocessing": "^6.39.5",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "three": "^0.186.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "playwright-core": "^1.56.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1"
+  }
+}

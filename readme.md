@@ -240,3 +240,11 @@ This project was built for learning purposes and to demonstrate understanding of
 - Transitioning from procedural to object-oriented thinking
 
 It is suitable for understanding basic system design patterns.
+
+---
+
+## Alpaca trading bot
+
+[`alpaca_bot/`](alpaca_bot/README.md) runs the strategy from
+[Jaswanth-dev-69/Trade](https://github.com/Jaswanth-dev-69/Trade) on an Alpaca paper
+account and reports its performance (`python alpaca_bot/bot.py status`).

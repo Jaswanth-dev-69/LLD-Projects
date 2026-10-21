@@ -1,0 +1,7 @@
+# Clone of https://github.com/Jaswanth-dev-69/Trade (kept read-only; bot.py re-clones it if missing)
+Trade/
+
+# Alpaca keys and generated reports — never commit
+alpaca_bot/.env
+alpaca_bot/reports/
+__pycache__/

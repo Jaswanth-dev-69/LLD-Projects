@@ -1,0 +1,54 @@
+# Runs the bot once per market day on your Alpaca PAPER account and posts the
+# performance report to the run summary. Does nothing until you add the
+# APCA_API_KEY_ID and APCA_API_SECRET_KEY repository secrets.
+name: alpaca-bot
+
+on:
+  schedule:
+    - cron: "45 14 * * 1-5"   # 10:45 New York (EDT) / 9:45 (EST), after the open
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only show the orders, do not place them"
+        type: boolean
+        default: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash   # -eo pipefail, so a failing bot fails the run despite `tee`
+    env:
+      APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
+      APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
+      APCA_API_BASE_URL: https://paper-api.alpaca.markets
+    steps:
+      - name: Check secrets
+        id: keys
+        run: |
+          if [ -n "$APCA_API_KEY_ID" ] && [ -n "$APCA_API_SECRET_KEY" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Add APCA_API_KEY_ID and APCA_API_SECRET_KEY repository secrets to enable the bot." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.keys.outputs.ok == 'true'
+      - uses: actions/setup-python@v5
+        if: steps.keys.outputs.ok == 'true'
+        with:
+          python-version: "3.12"
+      - name: Trade
+        if: steps.keys.outputs.ok == 'true'
+        working-directory: alpaca_bot
+        run: python bot.py trade ${{ inputs.dry_run && '--dry-run' || '' }} | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Performance report
+        if: steps.keys.outputs.ok == 'true'
+        working-directory: alpaca_bot
+        run: |
+          { echo '```'; python bot.py status; echo '```'; } | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: steps.keys.outputs.ok == 'true'
+        with:
+          name: performance-report
+          path: alpaca_bot/reports/report.html
